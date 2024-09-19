@@ -1,0 +1,204 @@
+{
+  "name": "contx",
+  "displayName": "Contx Copy Project Code to ChatGPT",
+  "description": "Easily copy file and folder contents with project tree structure to clipboard for AI (LLM/ChatGPT/Claude/...) context.",
+  "version": "1.0.0",
+  "publisher": "bethington",
+  "author": {
+    "name": "Ben Ethington"
+  },
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "clipboard",
+    "project structure",
+    "file content",
+    "LLM",
+    "code sharing",
+    "tree view",
+    "markdown",
+    "copy",
+    "compress",
+    "remove comments",
+    "token count",
+    "cost estimation",
+    "ai",
+    "chatgpt"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#092032",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://img.shields.io/visual-studio-marketplace/v/bethington.contx.svg",
+      "href": "https://marketplace.visualstudio.com/items?itemName=bethington.contx",
+      "description": "VS Code Marketplace Version"
+    }
+  ],
+  "preview": false,
+  "pricing": "Free",
+  "activationEvents": [
+    "onCommand:contx.copyToClipboard"
+  ],  
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "contx.copyToClipboard",
+        "title": "Copy to Clipboard (Contx)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "contx.copyToClipboard",
+          "when": "false"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "contx.copyToClipboard",
+          "group": "7_modification",
+          "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "contx.copyToClipboard",
+          "group": "1_modification",
+          "when": "editorFocus"
+        }
+      ]
+    },
+    "configuration": [
+      {
+        "title": "Contx",
+        "properties": {
+          "contx.ignoreGitIgnore": {
+            "type": "boolean",
+            "default": true,
+            "description": "Respect .gitignore rules when generating the project tree and copying files"
+          },
+          "contx.maxDepth": {
+            "type": "number",
+            "default": 5,
+            "description": "Maximum depth of the project tree"
+          },
+          "contx.excludePatterns": {
+            "type": "array",
+            "default": [
+              "node_modules",
+              "*.log"
+            ],
+            "description": "Additional patterns to exclude from the project tree and file copying (dot files are always ignored)"
+          },
+          "contx.outputFormat": {
+            "type": "string",
+            "enum": [
+              "plaintext",
+              "markdown",
+              "xml"
+            ],
+            "default": "plaintext",
+            "description": "Output format for the copied content"
+          },
+          "contx.maxFileSize": {
+            "type": "number",
+            "default": 1048576,
+            "description": "Maximum file size (in bytes) to include in the output. Default is 1MB (1048576 bytes)."
+          },
+          "contx.includeProjectTree": {
+            "type": "boolean",
+            "default": true,
+            "description": "Include the project tree structure in the output"
+          }
+        }
+      },
+      {
+        "title": "Contx: Code Processing",
+        "properties": {
+          "contx.compressCode": {
+            "type": "boolean",
+            "default": false,
+            "description": "Remove extra whitespace and empty lines from code when copying"
+          },
+          "contx.removeComments": {
+            "type": "boolean",
+            "default": false,
+            "description": "Remove comments from code when copying"
+          }
+        }
+      },
+      {
+        "title": "Contx: Token Counting",
+        "properties": {
+          "contx.llmModel": {
+            "type": "string",
+            "enum": [
+              "gpt-4",
+              "gpt-4o",
+              "gpt-4o-mini",
+              "claude-3-5-sonnet-20240620",
+              "claude-3-opus-20240229"
+            ],
+            "default": "gpt-4o",
+            "description": "LLM model to use for token count and cost estimation"
+          },
+          "contx.maxTokens": {
+            "type": ["number", "null"],
+            "default": null,
+            "description": "Maximum number of tokens allowed before warning. Set to 0 or null to disable warning. If not set, it will use the model's default max tokens."
+          },
+          "contx.enableTokenWarning": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable warning when token count exceeds the maximum"
+          },
+          "contx.enableTokenCounting": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable token counting and cost estimation (requires network access)"
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run lint",
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.57.0",
+    "glob": "^7.1.6",
+    "mocha": "^10.3.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/vscode": "^1.89.0",
+    "@vscode/test-cli": "^0.0.10",
+    "ignore": "^5.3.1",
+    "isbinaryfile": "^5.0.0",
+    "llm-cost": "^1.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bethington/contx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bethington/contx/issues"
+  },
+  "homepage": "https://github.com/bethington/contx#readme",
+  "license": "SEE LICENSE IN LICENSE"
+}
